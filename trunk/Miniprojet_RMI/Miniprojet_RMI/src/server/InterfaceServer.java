@@ -2,6 +2,7 @@ package server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /*
  * Cette interface décrit les fonctionnalités
@@ -9,9 +10,16 @@ import java.rmi.RemoteException;
  * sont implémentées par le serveur.
  */
 public interface InterfaceServer extends Remote {
-    public boolean addUser(User u) throws RemoteException;
+    // Créer un compte
+    public boolean register(String login, String password) throws RemoteException;
+    // S'identifier
+    public User connection(String login, String password) throws RemoteException;
+    // Créer une enchère
     public boolean addAuction(Auction a) throws RemoteException;
+    // Enchérir
     public boolean placeBid(Auction auct, User bidder, double bid) throws RemoteException;
-    public boolean isRegistered(User bidder) throws RemoteException;
-    public boolean isActive(Auction auct) throws RemoteException;
+    // Consulter les enchères
+    public ArrayList<Auction> getAllAuctions() throws RemoteException;
+    // Consulter ses enchères
+    public ArrayList<Auction> getOwnAuctions(User u) throws RemoteException;
 }

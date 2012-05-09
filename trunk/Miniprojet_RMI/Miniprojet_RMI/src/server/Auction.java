@@ -64,14 +64,14 @@ public class Auction implements Serializable {
 
     // Constructeur d'enchères persistantes (utilisé pour les tests)
     public Auction(int id, int duration, String description, User creator,
-            User bidder, double bid) {
+            User bidder, double bid, boolean status) {
         idAuction = id;
         startAuction = new GregorianCalendar();
         durationAuction = duration;
         descriptionAuction = description;
         creatorAuction = creator;
         bidderAuction = bidder;
-        statusAuction = true;
+        statusAuction = status;
 
         // Si l'enchère est négative, erreur
         if (bid > 0)
@@ -97,5 +97,9 @@ public class Auction implements Serializable {
     
     public void deactivate() {
         statusAuction = false;
+    }
+    
+    public User getCreator() {
+        return creatorAuction;
     }
 }

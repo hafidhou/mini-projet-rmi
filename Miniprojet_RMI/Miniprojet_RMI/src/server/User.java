@@ -13,4 +13,8 @@ public class User implements Serializable {
             loginUser = login;
             passwordUser = password;
         }
+        
+        public String getLogin() { return loginUser; }
+        
+        public String getPassword() { return passwordUser; }
 }

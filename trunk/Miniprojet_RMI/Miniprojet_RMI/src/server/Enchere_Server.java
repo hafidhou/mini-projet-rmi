@@ -57,7 +57,7 @@ public class Enchere_Server extends UnicastRemoteObject implements
     @Override
     public boolean placeBid(Auction auct, User bidder, double bid)
             throws RemoteException {
-        if (!isRegistered(bidder))
+        if (!isRegistered(bidder.getLogin()))
             return false;
         if (!isActive(auct))
             return false;

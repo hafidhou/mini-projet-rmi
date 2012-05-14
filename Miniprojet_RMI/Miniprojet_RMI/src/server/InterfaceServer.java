@@ -15,7 +15,7 @@ public interface InterfaceServer extends Remote {
     // S'identifier
     public User connection(String login, String password) throws RemoteException;
     // Créer une enchère
-    public boolean addAuction(Auction a) throws RemoteException;
+    public boolean addAuction(int duree, String desc, double montant, User creator) throws RemoteException;
     // Enchérir
     public boolean placeBid(Auction auct, User bidder, double bid) throws RemoteException;
     // Consulter les enchères

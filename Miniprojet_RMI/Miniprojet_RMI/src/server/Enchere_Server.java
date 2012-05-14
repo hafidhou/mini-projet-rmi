@@ -35,11 +35,10 @@ public class Enchere_Server extends UnicastRemoteObject implements
         
     }
 
-    
-
     @Override
-    public boolean addAuction(Auction a) throws RemoteException {
-        if (!auctions.add(a))
+    public boolean addAuction(int duree, String desc, double montant, User creator) throws RemoteException {
+        Auction a = new Auction(n_auctions,duree,desc,creator,montant);
+    	if (!auctions.add(a))
             return false;
 
         n_auctions++;

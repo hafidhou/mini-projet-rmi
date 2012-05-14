@@ -5,14 +5,14 @@ import java.util.GregorianCalendar;
 
 public class Auction implements Serializable {
 
-    int               idAuction;
-    GregorianCalendar startAuction;
-    int               durationAuction;
-    String            descriptionAuction;
-    User              creatorAuction;
-    User              bidderAuction;
-    double            bidAuction;
-    boolean           statusAuction;
+	private int               idAuction;
+	private GregorianCalendar startAuction;
+	private int               durationAuction;
+	private String            descriptionAuction;
+	private User              creatorAuction;
+	private User              bidderAuction;
+	private double            bidAuction;
+	private boolean           statusAuction;
 
     // Constructeur d'une nouvelle enchÃ¨re
     public Auction(int id, int duration, String description, User creator,
@@ -101,5 +101,48 @@ public class Auction implements Serializable {
     
     public User getCreator() {
         return creatorAuction;
+    }
+    
+    @Override
+    public String toString() {
+    	StringBuilder str = new StringBuilder();
+    	str.append("Enchère n°.").append(this.idAuction).append("\n");
+    	str.append("Description : ").append(this.descriptionAuction).append("\n");
+    	str.append("Createur : ").append(this.creatorAuction.getLogin()).append("\n");
+    	str.append("Dernier enchérisseur : ").append(this.bidderAuction.getLogin()).append("\n");
+    	str.append("Montant actuel : ").append(this.bidAuction).append("\n");
+    	if(this.isActive()) {
+    		long remainingTime = getRemainingTime();
+    		if(remainingTime < 0) {
+    			this.statusAuction = false;
+    			str.append("Enchère terminée.");
+    		} else {
+    			long jours = remainingTime / (1000*60*60*24);
+    			remainingTime -= jours * (1000*60*60*24);
+    			long heures = remainingTime / (1000*60*60);
+    			remainingTime -= heures * (1000*60*60);
+    			long minutes = remainingTime / (1000*60);
+    			remainingTime -= minutes * (1000*60);
+    			long secondes = remainingTime / (1000);
+    			remainingTime -= secondes * (1000);
+    			
+    			str.append("temps restant : \n").append(jours).append(" jours, ");
+    			str.append(heures).append(" heures, ").append(minutes).append(" minutes, ");
+    			str.append(secondes).append(" secondes et ");
+    			str.append(remainingTime).append("millisecondes\n");
+    		}
+    	}
+    	else
+    		str.append("Enchère terminée.");
+    	
+    	return str.toString();
+    }
+    
+    private long getRemainingTime() {
+    	GregorianCalendar now = new GregorianCalendar();
+    	GregorianCalendar end = (GregorianCalendar) this.startAuction.clone();
+    	end.add(GregorianCalendar.DAY_OF_MONTH, this.durationAuction);
+    	
+    	return end.getTimeInMillis() - now.getTimeInMillis();
     }
 }

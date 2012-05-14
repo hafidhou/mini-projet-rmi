@@ -106,16 +106,20 @@ public class Auction implements Serializable {
     @Override
     public String toString() {
     	StringBuilder str = new StringBuilder();
-    	str.append("Enchère n°.").append(this.idAuction).append("\n");
+    	str.append("Enchï¿½re nï¿½.").append(this.idAuction).append("\n");
     	str.append("Description : ").append(this.descriptionAuction).append("\n");
     	str.append("Createur : ").append(this.creatorAuction.getLogin()).append("\n");
-    	str.append("Dernier enchérisseur : ").append(this.bidderAuction.getLogin()).append("\n");
+    	if(this.bidderAuction != null) {
+    	    str.append("Dernier enchï¿½risseur : ").append(this.bidderAuction.getLogin()).append("\n");
+    	} else {
+    	    str.append("Aucun enchÃ©risseur\n");
+    	}
     	str.append("Montant actuel : ").append(this.bidAuction).append("\n");
     	if(this.isActive()) {
     		long remainingTime = getRemainingTime();
     		if(remainingTime < 0) {
     			this.statusAuction = false;
-    			str.append("Enchère terminée.");
+    			str.append("Enchï¿½re terminï¿½e.");
     		} else {
     			long jours = remainingTime / (1000*60*60*24);
     			remainingTime -= jours * (1000*60*60*24);
@@ -133,7 +137,7 @@ public class Auction implements Serializable {
     		}
     	}
     	else
-    		str.append("Enchère terminée.");
+    		str.append("Enchï¿½re terminï¿½e.");
     	
     	return str.toString();
     }

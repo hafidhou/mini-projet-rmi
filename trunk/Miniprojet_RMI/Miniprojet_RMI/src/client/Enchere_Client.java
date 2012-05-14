@@ -142,14 +142,15 @@ public class Enchere_Client {
 			System.out.println("1 - Créer une enchère");
 			System.out.println("2 - Consulter ses propres enchères");
 			System.out.println("3 - Consulter toutes les enchères");
-			System.out.println("4 - Se déconnecter");
+			System.out.println("4 - Enchérir");
+			System.out.println("5 - Se déconnecter");
 			
 			int choix = 0;
 			do {
 			    choix = lireInt();
-			    if (choix < 1 || choix > 4)
-			        System.out.println("Entrez un entier entre 1 et 4 !");
-			} while (choix < 1 || choix > 4);
+			    if (choix < 1 || choix > 5)
+			        System.out.println("Entrez un entier entre 1 et 5 !");
+			} while (choix < 1 || choix > 5);
 			
 			switch (choix) {
 			case 1 :
@@ -162,6 +163,9 @@ public class Enchere_Client {
 				consulter_toutes_encheres();
 				break;
 			case 4 :
+				encherir();
+				break;
+			case 5 :
 				qOk = false;
 				deconnecter();
 				break;
@@ -215,13 +219,45 @@ public class Enchere_Client {
     	ArrayList<Auction> auctions = null;
     	try {
     		auctions = server.getAllAuctions();
-
         	for(Auction a : auctions) {
         		System.out.println(a.toString());
         		System.out.println("\n------------------------------------------------------\n");
         	}
     	} catch (Exception ex) {
     		ex.printStackTrace();
+    	}
+    }
+    
+    private void encherir() {
+    	try {
+	    	Auction a = null;
+	    	boolean qOk = false;
+	    	int choix = 0;
+	    	System.out.print("Veuillez saisir un ID d'enchère : ");
+			do {
+			    choix = lireInt();
+			    a = server.getAuctionById(choix);
+			    if(a != null) {
+			    	if(a.getCreator() != currentUser)
+			    		qOk = true;
+			    	else System.out.println("Impossible d'enchérir sur sa propre enchère.");
+			    }
+			    else
+			    	System.out.print("Veuillez entrer un ID valide : ");
+			    
+			} while (!qOk);
+			
+			System.out.println("\nEnchère choisie : ");
+			System.out.println(a.toString());
+			do {
+				System.out.print("Choisir le nouveau montant de l'enchère : ");
+				choix = lireInt();
+				if(choix <= a.getBid()) System.out.println("Choisir un montant correct.");
+			} while (choix <= a.getBid());
+			
+			a.placeBid(currentUser, choix);
+    	} catch(Exception e) {
+    		e.printStackTrace();
     	}
     }
     

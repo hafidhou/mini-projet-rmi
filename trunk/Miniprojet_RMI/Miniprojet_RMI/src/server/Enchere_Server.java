@@ -121,10 +121,17 @@ public class Enchere_Server extends UnicastRemoteObject implements
     public ArrayList<Auction> getOwnAuctions(User u) throws RemoteException {
         ArrayList<Auction> ownAuctions = new ArrayList<Auction>();
         for(Auction a : auctions) {
-            if(u.getLogin().equals(a.getCreator().getLogin())) ownAuctions.add(a);
+            if(u.equals(a.getCreator())) ownAuctions.add(a);
         }
         
         return ownAuctions;
+    }
+    
+    public Auction getAuctionById(int id) throws RemoteException {
+    	for (Auction auc : auctions) {
+    		if(auc.getId() == id) return auc;
+    	}
+    	return null;
     }
     
     public static void main(String[] args) {

@@ -103,6 +103,14 @@ public class Auction implements Serializable {
         return creatorAuction;
     }
     
+    public int getId() {
+    	return this.idAuction;
+    }
+    
+    public double getBid() {
+    	return this.bidAuction;
+    }
+    
     @Override
     public String toString() {
     	StringBuilder str = new StringBuilder();

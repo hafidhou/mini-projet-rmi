@@ -22,4 +22,6 @@ public interface InterfaceServer extends Remote {
     public ArrayList<Auction> getAllAuctions() throws RemoteException;
     // Consulter ses enchÃ¨res
     public ArrayList<Auction> getOwnAuctions(User u) throws RemoteException;
+    // Consulter une enchère
+    public Auction getAuctionById(int id) throws RemoteException;
 }

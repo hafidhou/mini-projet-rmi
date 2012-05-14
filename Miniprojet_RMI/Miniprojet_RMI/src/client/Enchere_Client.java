@@ -28,7 +28,7 @@ public class Enchere_Client {
         lecteur = new Scanner(System.in);
     }
 
-    // Exécution du client
+    // Exï¿½cution du client
     public static void main(String[] args) throws AccessException,
             RemoteException, NotBoundException {
 
@@ -46,7 +46,7 @@ public class Enchere_Client {
         c.run();
     }
 
-    // Exécution du client
+    // Exï¿½cution du client
     public void run() {
         int choice = 0;
         while (choice != 3) {
@@ -62,14 +62,14 @@ public class Enchere_Client {
         }
     }
 
-    // Menu de départ
+    // Menu de dï¿½part
     // 1 : s'inscrire
     // 2 : s'identifier
     // 3 : quitter
     private int menu_auth() {
         System.out
-                .println("=== Bienvenue sur la contrefaçon chinoise d'Ebay ===");
-        System.out.println("1 - Créer un compte");
+                .println("=== Bienvenue sur la contrefaï¿½on chinoise d'Ebay ===");
+        System.out.println("1 - Crï¿½er un compte");
         System.out.println("2 - Se connecter");
         System.out.println("3 - Quitter");
 
@@ -92,7 +92,7 @@ public class Enchere_Client {
         System.out.print("Entrez votre mot de passe : ");
         String mdp = lireString();
 
-        // Connexion côté serveur
+        // Connexion cï¿½tï¿½ serveur
         User success = null;
         try {
             success = server.connection(login, mdp);
@@ -100,9 +100,9 @@ public class Enchere_Client {
             e.printStackTrace();
         }
 
-        // Résultat de la connexion
+        // Rï¿½sultat de la connexion
         if (success != null) {
-            System.out.println("\nConnecté !");
+            System.out.println("\nConnectï¿½ !");
             currentUser = success;
         } else {
             System.out.println("\nMauvais nom d'utilisateur ou mot de passe");
@@ -112,13 +112,13 @@ public class Enchere_Client {
     }
 
     private void register() {
-        System.out.println("== Créer un compte ==");
+        System.out.println("== Crï¿½er un compte ==");
         System.out.print("Entrez un pseudo : ");
         String login = lireString();
         System.out.print("Entrez un mot de passe : ");
         String mdp = lireString();
 
-        // Création du compte côté serveur
+        // Crï¿½ation du compte cï¿½tï¿½ serveur
         boolean success = false;
         try {
             success = server.register(login, mdp);
@@ -128,7 +128,7 @@ public class Enchere_Client {
         }
 
         if (success) {
-            System.out.println("\nInscription complète");
+            System.out.println("\nInscription complï¿½te");
         } else {
             System.out.println("\nErreur lors de l'inscription");
         }
@@ -139,11 +139,11 @@ public class Enchere_Client {
     	
     	while(qOk) {
 	    	System.out.println("=== Menu principal ===");
-			System.out.println("1 - Créer une enchère");
-			System.out.println("2 - Consulter ses propres enchères");
-			System.out.println("3 - Consulter toutes les enchères");
-			System.out.println("4 - Enchérir");
-			System.out.println("5 - Se déconnecter");
+			System.out.println("1 - Crï¿½er une enchï¿½re");
+			System.out.println("2 - Consulter ses propres enchï¿½res");
+			System.out.println("3 - Consulter toutes les enchï¿½res");
+			System.out.println("4 - Enchï¿½rir");
+			System.out.println("5 - Se dï¿½connecter");
 			
 			int choix = 0;
 			do {
@@ -174,15 +174,15 @@ public class Enchere_Client {
     }
     
     private void creer_enchere() {
-    	System.out.println("== Créer une enchère ==");
-        System.out.print("Entrez une durée (en jours) : ");
+    	System.out.println("== Crï¿½er une enchï¿½re ==");
+        System.out.print("Entrez une durï¿½e (en jours) : ");
         int duree = lireInt();
         System.out.print("Entrez une description : ");
         String desc = lireString();
         
         double montant = -1;
         while(montant < 0) {
-	        System.out.print("Entrez un montant de départ : ");
+	        System.out.print("Entrez un montant de dï¿½part : ");
 	        montant = lireDouble();
         }
         
@@ -195,9 +195,9 @@ public class Enchere_Client {
         }
 
         if (success) {
-            System.out.println("\nVotre enchère a bien été créée");
+            System.out.println("\nVotre enchï¿½re a bien ï¿½tï¿½ crï¿½ï¿½e");
         } else {
-            System.out.println("\nErreur lors de la création d'enchère");
+            System.out.println("\nErreur lors de la crï¿½ation d'enchï¿½re");
         }
     }
     
@@ -233,29 +233,32 @@ public class Enchere_Client {
 	    	Auction a = null;
 	    	boolean qOk = false;
 	    	int choix = 0;
-	    	System.out.print("Veuillez saisir un ID d'enchère : ");
+	    	System.out.print("Veuillez saisir un ID d'enchï¿½re : ");
 			do {
 			    choix = lireInt();
 			    a = server.getAuctionById(choix);
 			    if(a != null) {
-			    	if(a.getCreator() != currentUser)
+			    	if(!a.getCreator().getLogin().equals(currentUser.getLogin()))
 			    		qOk = true;
-			    	else System.out.println("Impossible d'enchérir sur sa propre enchère.");
+			    	else System.out.println("Impossible d'enchï¿½rir sur sa propre enchï¿½re.");
 			    }
 			    else
 			    	System.out.print("Veuillez entrer un ID valide : ");
 			    
 			} while (!qOk);
 			
-			System.out.println("\nEnchère choisie : ");
+			System.out.println("\nEnchï¿½re choisie : ");
 			System.out.println(a.toString());
 			do {
-				System.out.print("Choisir le nouveau montant de l'enchère : ");
+				System.out.print("Choisir le nouveau montant de l'enchï¿½re : ");
 				choix = lireInt();
 				if(choix <= a.getBid()) System.out.println("Choisir un montant correct.");
 			} while (choix <= a.getBid());
 			
-			a.placeBid(currentUser, choix);
+			if(server.placeBid(a, currentUser, choix))
+			    System.out.println("L'offre d'enchÃ¨re a Ã©tÃ© placÃ©e.");
+			else
+			    System.out.println("Erreur lors du placement de l'offre.");
     	} catch(Exception e) {
     		e.printStackTrace();
     	}

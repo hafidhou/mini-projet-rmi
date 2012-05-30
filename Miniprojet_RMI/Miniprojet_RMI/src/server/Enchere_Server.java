@@ -10,8 +10,10 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.login.LoginContext;
+
 public class Enchere_Server extends UnicastRemoteObject implements
-        InterfaceServer {
+        InterfaceServer, InterfaceServeurEnregistre {
 
     ArrayList<User>    users;
     ArrayList<Auction> auctions;
@@ -26,19 +28,21 @@ public class Enchere_Server extends UnicastRemoteObject implements
         n_users = 0;
         n_auctions = 0;
     }
-    
-    public Enchere_Server(ArrayList<User> users, ArrayList<Auction> auctions) throws RemoteException {
+
+    public Enchere_Server(ArrayList<User> users, ArrayList<Auction> auctions)
+            throws RemoteException {
         this.users = users;
         this.auctions = auctions;
         n_users = users.size() + 1;
         n_auctions = auctions.size() + 1;
-        
+
     }
 
     @Override
-    public boolean addAuction(int duree, String desc, double montant, User creator) throws RemoteException {
-        Auction a = new Auction(n_auctions,duree,desc,creator,montant);
-    	if (!auctions.add(a))
+    public boolean addAuction(int duree, String desc, double montant,
+            User creator) throws RemoteException {
+        Auction a = new Auction(n_auctions, duree, desc, creator, montant);
+        if (!auctions.add(a))
             return false;
 
         n_auctions++;
@@ -94,13 +98,20 @@ public class Enchere_Server extends UnicastRemoteObject implements
     @Override
     public User connection(String login, String password)
             throws RemoteException {
-        User search = getByLogin(login);
-        if (search == null)
-            return null;
-        if (search.getPassword().equals(password))
-            return search;
-        return null;
+        boolean success = false;
+        try {
+            LoginContext lc = new LoginContext("RmiServeur",
+                    new EnchereCallbackHandler(login, password));
+            lc.login();
+            success = true;
+        } catch (Exception e) {
+            success = false;
+        }
 
+        if (success)
+            return getByLogin(login);
+        else
+            return null;
     }
 
     @Override
@@ -111,7 +122,7 @@ public class Enchere_Server extends UnicastRemoteObject implements
 
         return addUser(new User(n_users, login, password));
     }
-    
+
     @Override
     public ArrayList<Auction> getAllAuctions() throws RemoteException {
         return auctions;
@@ -120,20 +131,22 @@ public class Enchere_Server extends UnicastRemoteObject implements
     @Override
     public ArrayList<Auction> getOwnAuctions(User u) throws RemoteException {
         ArrayList<Auction> ownAuctions = new ArrayList<Auction>();
-        for(Auction a : auctions) {
-            if(u.getLogin().equals(a.getCreator().getLogin())) ownAuctions.add(a);
+        for (Auction a : auctions) {
+            if (u.getLogin().equals(a.getCreator().getLogin()))
+                ownAuctions.add(a);
         }
-        
+
         return ownAuctions;
     }
-    
+
     public Auction getAuctionById(int id) throws RemoteException {
-    	for (Auction auc : auctions) {
-    		if(auc.getId() == id) return auc;
-    	}
-    	return null;
+        for (Auction auc : auctions) {
+            if (auc.getId() == id)
+                return auc;
+        }
+        return null;
     }
-    
+
     public static void main(String[] args) {
         // Création du serveur
         InterfaceServer o = null;
